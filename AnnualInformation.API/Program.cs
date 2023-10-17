@@ -1,4 +1,7 @@
+using AnnualInformation.API;
 using AnnualInformation.API.Data;
+using AnnualInformation.API.Service;
+using AnnualInformation.API.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +12,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => {
 });
 
 builder.Services.AddControllers();
+builder.Services.AddTransient<ICustomerService,CustomerService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
