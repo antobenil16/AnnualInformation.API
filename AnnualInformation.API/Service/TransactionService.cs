@@ -4,6 +4,7 @@ using AnnualInformation.API.Dto;
 using AnnualInformation.API.Models;
 using AnnualInformation.API.Service.Interface;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnnualInformation.API.Service
 {
@@ -24,6 +25,12 @@ namespace AnnualInformation.API.Service
         /// <exception cref="NotImplementedException"></exception>
         public async Task<bool> InsertTransactionAsync(TransactionRequestDto transactionRequestDto)
         {
+           // check the transaction limit
+            if(!await CheckLimit(transactionRequestDto))
+            {
+                // add message don't have enough limit
+                return false;
+            }
             //get mapped transaction details
             var transactions = MapDtoToTransaction(transactionRequestDto);
             try
@@ -72,6 +79,31 @@ namespace AnnualInformation.API.Service
             transactions.Add(destination);
 
             return transactions;
+        }
+
+        private async Task<bool> CheckLimit(TransactionRequestDto trans)
+        {
+            try
+            {
+                var transactions = await _context.Transactions.Where(t => t.CustomerId == trans.Source.CustomerId && t.TransactionType == (int)CommonValues.TransactionType.Debit && t.TransactionDate.Date == DateTime.Now.Date).ToListAsync();
+                if (transactions != null)
+                {
+                    // get existing transactions amount
+                    decimal existingTransferedAmount = transactions.Sum(a=> a.Amount);
+
+                    // existingTransferedAmount + current transfering amount should not exceed to 100000
+                    if ((existingTransferedAmount + trans.Amount) > 100000)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
         }
     }
 }

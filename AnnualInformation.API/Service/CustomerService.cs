@@ -32,8 +32,7 @@ namespace AnnualInformation.API.Service
         public async Task<List<CustomerTransactionDto>> GetAllCustomerTransactions(int customerId)
         {
             // get data using store procedure
-            var data =  _context.GetCustomerTransactionsStoreProcedure(customerId);
-            return data;
+            return await _context.GetCustomerTransactionsStoreProcedure(customerId);
         }
 
         public async Task<Customer> GetById(int id)

@@ -18,10 +18,6 @@ namespace AnnualInformation.API.Controllers
         [HttpPost("InsertTransactionAsync")]
         public async Task<IActionResult> InsertTransactionAsync([FromBody] TransactionRequestDto requestDto)
         {
-            if(requestDto.Amount > 100000)
-            {
-                return BadRequest("Amount should not more that 100000");
-            }
             var result = await _transactionService.InsertTransactionAsync(requestDto);
             return Ok();
         }

@@ -43,10 +43,10 @@ namespace AnnualInformation.API.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        public  List<CustomerTransactionDto> GetCustomerTransactionsStoreProcedure(int customerId)
+        public async Task<List<CustomerTransactionDto>> GetCustomerTransactionsStoreProcedure(int customerId)
         {
             // Call the stored procedure using FromSqlRaw
-            return  CustomerTransactionsStoreProcedure.FromSqlRaw("EXEC sp_GetCustomerTransactions @CustomerId", new SqlParameter("@CustomerId", customerId)).ToList();
+            return await CustomerTransactionsStoreProcedure.FromSqlRaw("EXEC sp_GetCustomerTransactions @CustomerId", new SqlParameter("@CustomerId", customerId)).ToListAsync();
         }
     }
     
