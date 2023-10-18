@@ -20,5 +20,11 @@ namespace AnnualInformation.API.Controllers
             return Ok(await _customerService.GetAll());
         }
 
+        [HttpGet("GetCustomerTransactions/{customerId}")]
+        public async Task<IActionResult> GetTransactions(int customerId)
+        {
+            return Ok(await _customerService.GetAllCustomerTransactions(customerId));
+        }
+
     }
 }

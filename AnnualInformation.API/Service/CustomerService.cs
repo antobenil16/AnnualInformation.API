@@ -33,7 +33,7 @@ namespace AnnualInformation.API.Service
         {
             // get data using store procedure
             var data =  _context.GetCustomerTransactionsStoreProcedure(customerId);
-            return null;
+            return data;
         }
 
         public async Task<Customer> GetById(int id)

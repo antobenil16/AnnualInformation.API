@@ -43,10 +43,10 @@ namespace AnnualInformation.API.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        public IList<CustomerTransactionDto> GetCustomerTransactionsStoreProcedure(int customerId)
+        public  List<CustomerTransactionDto> GetCustomerTransactionsStoreProcedure(int customerId)
         {
             // Call the stored procedure using FromSqlRaw
-            return CustomerTransactionsStoreProcedure.FromSqlRaw("EXEC YourStoredProcedure @CustomerId", new SqlParameter("@CustomerId", customerId)).ToList();
+            return  CustomerTransactionsStoreProcedure.FromSqlRaw("EXEC sp_GetCustomerTransactions @CustomerId", new SqlParameter("@CustomerId", customerId)).ToList();
         }
     }
     
