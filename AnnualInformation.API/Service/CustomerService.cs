@@ -17,6 +17,10 @@ namespace AnnualInformation.API.Service
             _mapper = mapper;
                 
         }
+        /// <summary>
+        /// Get All Customers with branch details
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<CustomerDto>> GetAll()
         {
             var customers = await _context.Customers.Include(b=> b.Branch).ToListAsync();
