@@ -89,7 +89,7 @@ namespace AnnualInformation.API.Service
                 if (transactions != null)
                 {
                     // get existing transactions amount
-                    decimal existingTransferedAmount = transactions.Sum(a=> a.Amount);
+                    decimal existingTransferedAmount = Math.Abs(transactions.Sum(a=> a.Amount));
 
                     // existingTransferedAmount + current transfering amount should not exceed to 100000
                     if ((existingTransferedAmount + trans.Amount) > 100000)

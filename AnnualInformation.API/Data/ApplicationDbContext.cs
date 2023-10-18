@@ -17,6 +17,7 @@ namespace AnnualInformation.API.Data
         public DbSet<Transaction> Transactions { get; set; }
         // DbSet for  stored procedure result model
         public DbSet<CustomerTransactionDto> CustomerTransactionsStoreProcedure { get; set; }
+        public DbSet<TransactionSummaryDto> TransactionSummaryStoreProcedure { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,6 +48,10 @@ namespace AnnualInformation.API.Data
         {
             // Call the stored procedure using FromSqlRaw
             return await CustomerTransactionsStoreProcedure.FromSqlRaw("EXEC sp_GetCustomerTransactions @CustomerId", new SqlParameter("@CustomerId", customerId)).ToListAsync();
+        }
+        public async Task<List<TransactionSummaryDto>> GetTransactionSummaryAsync(int bankId,DateTime fromDate,DateTime toDate)
+        {
+            return await TransactionSummaryStoreProcedure.FromSqlInterpolated($"Exe sp_GetTransactionSummary {bankId},{fromDate.Date},{toDate.Date}").ToListAsync();
         }
     }
     
