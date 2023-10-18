@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnnualInformation.API.Service
 {
-    public class BankService : IBankService
+    public class BankService : GenericService, IBankService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace AnnualInformation.API.Service
         {
             try
             {
-                var bank = await _context.Banks.Include(b => b.Branches).FirstOrDefaultAsync(bank=> bank.Id == bankId);
+                var bank = await _context.Banks.Include(b => b.Branches).FirstOrDefaultAsync(bank=> bank.Id == bankId && !bank.IsDeleted);
                 if(bank != null)
                 {
                     var bankDto = _mapper.Map<BankDto>(bank);
@@ -27,12 +27,14 @@ namespace AnnualInformation.API.Service
                 }
                 else
                 {
-                    return new BankDto();
+                    Errors.Add("Could not get bank");
+                    return null;
                 }
                
             }catch (Exception ex)
             {
-                throw;
+                Errors.Add(ex.Message);
+                return null;
             }
         }
     }

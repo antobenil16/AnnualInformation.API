@@ -19,7 +19,22 @@ namespace AnnualInformation.API.Controllers
         public async Task<IActionResult> InsertTransactionAsync([FromBody] TransactionRequestDto requestDto)
         {
             var result = await _transactionService.InsertTransactionAsync(requestDto);
-            return Ok();
+            if (!result)
+            {
+                return BadRequest(_transactionService.GetErrors());
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("GetTransactionSummary")]
+        public async Task<IActionResult> GetTransactionSummary([FromQuery]int bankId, [FromQuery]DateTime fromDate, [FromQuery] DateTime toDate)
+        {
+            var result = await _transactionService.GetTransactionsSummaryAsync(bankId, fromDate, toDate);
+            if(result == null)
+            {
+                return NotFound(_transactionService.GetErrors());
+            }
+            return Ok(result);
         }
     }
 }

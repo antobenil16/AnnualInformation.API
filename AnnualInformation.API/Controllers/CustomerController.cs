@@ -17,13 +17,23 @@ namespace AnnualInformation.API.Controllers
         [HttpGet("GetAllCustomers")]
         public async Task<IActionResult> GetAllCustomers()
         {
-            return Ok(await _customerService.GetAll());
+            var result = await _customerService.GetAll();
+            if(result == null)
+            {
+                return NotFound(_customerService.GetErrors());
+            }
+            return Ok(result);
         }
 
         [HttpGet("GetCustomerTransactions/{customerId}")]
         public async Task<IActionResult> GetTransactions(int customerId)
         {
-            return Ok(await _customerService.GetAllCustomerTransactions(customerId));
+            var result = await _customerService.GetAllCustomerTransactions(customerId);
+            if(result == null)
+            {
+                return NotFound(_customerService.GetErrors());
+            }
+            return Ok(result);
         }
 
     }

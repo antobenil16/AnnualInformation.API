@@ -21,7 +21,12 @@ namespace AnnualInformation.API.Controllers
         [HttpGet("GetBankWithBranches/{bankId}")]
         public async Task<IActionResult> GetBankWithBranches (int bankId)
         {
-            return Ok(await _bankService.GetBankWithBranches(bankId));
+            var result = await _bankService.GetBankWithBranches(bankId);
+            if(result == null)
+            {
+                return BadRequest(_bankService.GetErrors());
+            }
+            return Ok(result);
         }
 
     }

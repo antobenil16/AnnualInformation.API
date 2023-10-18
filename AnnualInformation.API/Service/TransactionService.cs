@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnnualInformation.API.Service
 {
-    public class TransactionService : ITransactionService
+    public class TransactionService : GenericService, ITransactionService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -29,6 +29,7 @@ namespace AnnualInformation.API.Service
             if(!await CheckLimit(transactionRequestDto))
             {
                 // add message don't have enough limit
+                Errors.Add("Transaction limit crossed");
                 return false;
             }
             //get mapped transaction details
@@ -44,7 +45,8 @@ namespace AnnualInformation.API.Service
 
             }catch(Exception ex)
             {
-                throw;
+                Errors.Add(ex.Message);
+                return false;
             }
         }
         private List<Transaction> MapDtoToTransaction(TransactionRequestDto trans)
@@ -101,7 +103,23 @@ namespace AnnualInformation.API.Service
             }
             catch (Exception ex)
             {
+                Errors.Add(ex.Message);
                 return false;
+            }
+            
+        }
+
+        public async Task<List<TransactionSummaryDto>> GetTransactionsSummaryAsync(int bankId, DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                // get data using store procedure
+                return await _context.GetTransactionSummaryAsync(bankId, fromDate, toDate);
+            }
+            catch(Exception ex)
+            {
+                Errors.Add(ex.Message);
+                return null;
             }
             
         }

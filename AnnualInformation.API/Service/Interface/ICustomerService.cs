@@ -3,7 +3,7 @@ using AnnualInformation.API.Models;
 
 namespace AnnualInformation.API.Service.Interface
 {
-    public interface ICustomerService
+    public interface ICustomerService:IGenericService
     {
         Task<List<CustomerDto>> GetAll();
         Task<Customer> GetById(int id);

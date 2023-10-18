@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnnualInformation.API.Service
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : GenericService, ICustomerService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -23,16 +23,31 @@ namespace AnnualInformation.API.Service
         /// <returns></returns>
         public async Task<List<CustomerDto>> GetAll()
         {
-            var customers = await _context.Customers.Include(b=> b.Branch).ToListAsync();
-            var customerList = _mapper.Map<List<CustomerDto>>(customers);
-            return customerList;
-            
+            try
+            {
+                var customers = await _context.Customers.Include(b => b.Branch).ToListAsync();
+                var customerList = _mapper.Map<List<CustomerDto>>(customers);
+                return customerList;
+            }
+            catch(Exception ex)
+            {
+                Errors.Add(ex.Message);
+                return null;
+            }
         }
 
         public async Task<List<CustomerTransactionDto>> GetAllCustomerTransactions(int customerId)
         {
-            // get data using store procedure
-            return await _context.GetCustomerTransactionsStoreProcedure(customerId);
+            try
+            {
+                // get data using store procedure
+                return await _context.GetCustomerTransactionsStoreProcedure(customerId);
+            }
+            catch(Exception ex)
+            {
+                Errors.Add(ex.Message);
+                return null;
+            }            
         }
 
         public async Task<Customer> GetById(int id)

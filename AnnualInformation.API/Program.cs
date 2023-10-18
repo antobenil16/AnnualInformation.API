@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => {
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IGenericService, GenericService>();
 builder.Services.AddTransient<ICustomerService,CustomerService>();
 builder.Services.AddTransient<IBankService,BankService>();
 builder.Services.AddTransient<ITransactionService,TransactionService>();
