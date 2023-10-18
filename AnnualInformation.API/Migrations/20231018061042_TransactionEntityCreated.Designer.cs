@@ -4,6 +4,7 @@ using AnnualInformation.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnnualInformation.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231018061042_TransactionEntityCreated")]
+    partial class TransactionEntityCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace AnnualInformation.API.Migrations
                         {
                             Id = 1,
                             Address = "Mumbai, Maharashtra, India",
-                            CreatedDate = new DateTime(2023, 10, 18, 12, 1, 43, 519, DateTimeKind.Local).AddTicks(8718),
+                            CreatedDate = new DateTime(2023, 10, 18, 11, 40, 42, 488, DateTimeKind.Local).AddTicks(6810),
                             IsDeleted = false,
                             Name = "ICICI Bank",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -106,8 +109,9 @@ namespace AnnualInformation.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccountNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -130,9 +134,6 @@ namespace AnnualInformation.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccountNumber")
-                        .IsUnique();
 
                     b.HasIndex("BranchId");
 
