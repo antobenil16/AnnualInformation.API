@@ -7,5 +7,7 @@ namespace AnnualInformation.API.Service.Interface
     {
         Task<List<CustomerDto>> GetAll();
         Task<Customer> GetById(int id);
+
+        Task<List<CustomerTransactionDto>> GetAllCustomerTransactions(int customerId);
     }
 }

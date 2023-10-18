@@ -1,4 +1,6 @@
-﻿using AnnualInformation.API.Models;
+﻿using AnnualInformation.API.Dto;
+using AnnualInformation.API.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace AnnualInformation.API.Data
@@ -13,6 +15,9 @@ namespace AnnualInformation.API.Data
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Customer> Customers { get; set; }  
         public DbSet<Transaction> Transactions { get; set; }
+        // DbSet for  stored procedure result model
+        public DbSet<CustomerTransactionDto> CustomerTransactionsStoreProcedure { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,19 +34,20 @@ namespace AnnualInformation.API.Data
             modelBuilder.Entity<Customer>()
                .HasIndex(e => e.AccountNumber)
                .IsUnique();
-            modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.Sender)
-            .WithMany(c => c.SentTransactions)
-            .HasForeignKey(t => t.SenderId)
-            .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.Receiver)
-            .WithMany(c => c.ReceivedTransactions)
-            .HasForeignKey(t => t.ReceiverId)
+            .HasOne(t => t.Customer)
+            .WithMany(c => c.Transactions)
+            .HasForeignKey(t => t.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }
+        public IList<CustomerTransactionDto> GetCustomerTransactionsStoreProcedure(int customerId)
+        {
+            // Call the stored procedure using FromSqlRaw
+            return CustomerTransactionsStoreProcedure.FromSqlRaw("EXEC YourStoredProcedure @CustomerId", new SqlParameter("@CustomerId", customerId)).ToList();
+        }
     }
+    
 }

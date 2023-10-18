@@ -8,7 +8,6 @@ namespace AnnualInformation.API.Models
         public int BranchId { get; set; } // This is home branch for the customer
         public Branch Branch { get; set; }
         public int AccountNumber { get; set; }
-        public List<Transaction> SentTransactions { get; set; }
-        public List<Transaction> ReceivedTransactions { get; set; }
+        public List<Transaction> Transactions { get; set; }
     }
 }

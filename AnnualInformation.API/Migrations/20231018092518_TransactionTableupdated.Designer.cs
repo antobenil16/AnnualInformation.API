@@ -4,6 +4,7 @@ using AnnualInformation.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnnualInformation.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231018092518_TransactionTableupdated")]
+    partial class TransactionTableupdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace AnnualInformation.API.Migrations
                         {
                             Id = 1,
                             Address = "Mumbai, Maharashtra, India",
-                            CreatedDate = new DateTime(2023, 10, 18, 15, 23, 3, 876, DateTimeKind.Local).AddTicks(47),
+                            CreatedDate = new DateTime(2023, 10, 18, 14, 55, 18, 658, DateTimeKind.Local).AddTicks(1649),
                             IsDeleted = false,
                             Name = "ICICI Bank",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -147,9 +150,9 @@ namespace AnnualInformation.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
+                    b.Property<double>("Amount")
                         .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("float(18)");
 
                     b.Property<int>("BranchId")
                         .HasColumnType("int");

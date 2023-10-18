@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => {
 builder.Services.AddControllers();
 builder.Services.AddTransient<ICustomerService,CustomerService>();
 builder.Services.AddTransient<IBankService,BankService>();
+builder.Services.AddTransient<ITransactionService,TransactionService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));

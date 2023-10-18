@@ -29,9 +29,21 @@ namespace AnnualInformation.API.Service
             
         }
 
-        public Task<Customer> GetById(int id)
+        public async Task<List<CustomerTransactionDto>> GetAllCustomerTransactions(int customerId)
         {
-            throw new NotImplementedException();
+            // get data using store procedure
+            var data =  _context.GetCustomerTransactionsStoreProcedure(customerId);
+            return null;
+        }
+
+        public async Task<Customer> GetById(int id)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(b => b.Id == id);
+            if(customer == null)
+            {
+                return null;
+            }
+            return customer;
         }
     }
 }
