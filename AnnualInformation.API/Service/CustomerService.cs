@@ -41,7 +41,8 @@ namespace AnnualInformation.API.Service
             try
             {
                 // get data using store procedure
-                return await _context.GetCustomerTransactionsStoreProcedure(customerId);
+                var result= await _context.GetCustomerTransactionsStoreProcedure(customerId);
+                return result;
             }
             catch(Exception ex)
             {

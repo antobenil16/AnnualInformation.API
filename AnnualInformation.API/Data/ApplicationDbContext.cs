@@ -42,6 +42,9 @@ namespace AnnualInformation.API.Data
             .HasForeignKey(t => t.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<TransactionSummaryDto>().HasKey(t=> t.TransactionId);
+            modelBuilder.Entity<CustomerTransactionDto>().HasKey(t=> t.TransactionId);
+
             base.OnModelCreating(modelBuilder);
         }
         public async Task<List<CustomerTransactionDto>> GetCustomerTransactionsStoreProcedure(int customerId)
@@ -51,7 +54,11 @@ namespace AnnualInformation.API.Data
         }
         public async Task<List<TransactionSummaryDto>> GetTransactionSummaryAsync(int bankId,DateTime fromDate,DateTime toDate)
         {
-            return await TransactionSummaryStoreProcedure.FromSqlInterpolated($"Exe sp_GetTransactionSummary {bankId},{fromDate.Date},{toDate.Date}").ToListAsync();
+            var bankIdParam = new SqlParameter("@BankId", bankId);
+            var fromDateParam = new SqlParameter("@FromDate", fromDate);
+            var toDateParam = new SqlParameter("@ToDate", toDate);
+            var result= await TransactionSummaryStoreProcedure.FromSqlRaw("EXEC sp_GetTransactionSummary @BankId, @FromDate, @ToDate", bankIdParam, fromDateParam, toDateParam).ToListAsync();
+            return result;
         }
     }
     

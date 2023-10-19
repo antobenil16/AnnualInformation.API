@@ -19,7 +19,7 @@ namespace AnnualInformation.API.Service
         {
             try
             {
-                var bank = await _context.Banks.Include(b => b.Branches).FirstOrDefaultAsync(bank=> bank.Id == bankId && !bank.IsDeleted);
+                var bank = await _context.Banks.Include(b => b.Branches).FirstOrDefaultAsync(bank=> bank.Id == bankId);
                 if(bank != null)
                 {
                     var bankDto = _mapper.Map<BankDto>(bank);

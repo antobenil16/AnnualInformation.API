@@ -2,6 +2,7 @@
 {
     public class CustomerTransactionDto : CustomerDto
     {
+        public int TransactionId { get; set; }
         public string BranchAddress { get; set; }
         public string BankName { get; set; }
         public string TransactionTypeName { get; set; }

@@ -2,6 +2,9 @@
 {
     public class TransactionSummaryDto
     {
+        // bank id
+        public int Id { get; set; }
+        public int TransactionId { get; set; }
         public string BankName { get; set; }
         public string BranchName { get; set; }
         public string CustomerName { get; set; }

@@ -87,15 +87,20 @@ namespace AnnualInformation.API.Service
         {
             try
             {
-                var transactions = await _context.Transactions.Where(t => t.CustomerId == trans.Source.CustomerId && t.TransactionType == (int)CommonValues.TransactionType.Debit && t.TransactionDate.Date == DateTime.Now.Date).ToListAsync();
+                var transactions = await _context.Transactions.Where(t => t.CustomerId == trans.Source.CustomerId && t.TransactionType == (int)CommonValues.TransactionType.Debit && t.TransactionDate.Date.Year == trans.TransactionDate.Date.Year).ToListAsync();
                 if (transactions != null)
                 {
                     // get existing transactions amount
                     decimal existingTransferedAmount = Math.Abs(transactions.Sum(a=> a.Amount));
 
-                    // existingTransferedAmount + current transfering amount should not exceed to 100000
-                    if ((existingTransferedAmount + trans.Amount) > 100000)
+                    if (existingTransferedAmount > 1000000)
                     {
+                        var todaysTransactionAmount= Math.Abs( transactions.Where(t=> t.TransactionDate.Date == trans.TransactionDate.Date).Sum(a=> a.Amount));
+
+                        if((trans.Amount + todaysTransactionAmount) <= 100000)
+                        {
+                            return true;
+                        }
                         return false;
                     }
                 }
@@ -114,7 +119,8 @@ namespace AnnualInformation.API.Service
             try
             {
                 // get data using store procedure
-                return await _context.GetTransactionSummaryAsync(bankId, fromDate, toDate);
+                var data = await _context.GetTransactionSummaryAsync(bankId, fromDate, toDate);
+                return data;
             }
             catch(Exception ex)
             {
